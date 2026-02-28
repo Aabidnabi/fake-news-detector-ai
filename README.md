@@ -22,7 +22,7 @@ An advanced AI-powered web application that detects fake news articles using Mac
 
 ## 🖥️ Live Demo
 
-[Click here to view live demo](https://your-app-name.onrender.com)
+[Click here to view live demo](https://fake-news-detector-ai-0izj.onrender.com)
 
 ## 📸 Screenshots
 
@@ -67,5 +67,5 @@ An advanced AI-powered web application that detects fake news articles using Mac
 
 ### Step 1: Clone the Repository
 ```bash
-git clone https://github.com/https://github.com/Aabidnabi/fake-news-detector-ai.git
+git clone https://github.com/Aabidnabi/fake-news-detector-ai.git
 cd fake-news-detector
