@@ -28,7 +28,9 @@ An advanced AI-powered web application that detects fake news articles using Mac
 
 | Light Mode | Dark Mode |
 |------------|-----------|
-| ![Light](screenshots/light.png) | ![Dark](screenshots/dark.png) |
+| ![Light](<img width="1919" height="907" alt="Screenshot 2026-02-28 110422" src="https://github.com/user-attachments/assets/b3050f88-56fb-48f6-b175-e0abc3b43760" />
+) | ![Dark](<img width="1916" height="860" alt="Screenshot 2026-02-28 111528" src="https://github.com/user-attachments/assets/02cddf1e-5cb9-4342-ac83-25111e8f9990" />) |
+
 
 ## 🛠️ Technologies Used
 
