@@ -1,0 +1,416 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes"
+    />
+    <title>FakeNewsGuard | AI-Powered Truth Verification</title>
+
+    <!-- Bootstrap 5 CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+
+    <!-- Font Awesome 6 -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- AOS Animation Library -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+
+    <!-- Custom CSS -->
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
+  </head>
+  <body>
+    <!-- Animated Background -->
+    <div class="animated-bg">
+      <div class="bg-gradient"></div>
+      <div class="bg-particles"></div>
+    </div>
+
+    <div class="container">
+      <!-- Navigation Bar -->
+      <nav class="navbar" data-aos="fade-down">
+        <div class="logo">
+          <!-- Custom Logo - place your logo in static/images/ -->
+          <img
+            src="{{ url_for('static', filename='images/logo.png') }}"
+            alt="FakeNewsGuard Logo"
+            class="logo-img"
+            onerror="
+              this.style.display = 'none';
+              this.nextElementSibling.style.display = 'flex';
+            "
+          />
+          <div class="logo-icon" style="display: none">
+            <i class="fas fa-shield-alt"></i>
+          </div>
+          <span class="logo-text">FakeNewsGuard</span>
+        </div>
+        <div class="nav-links">
+          <a href="#" class="nav-link">Home</a>
+          <a href="#" class="nav-link">How it Works</a>
+          <a href="#" class="nav-link">About</a>
+          <a href="#" class="nav-link">Contact</a>
+          <button class="theme-toggle-nav">
+            <i class="fas fa-moon"></i>
+            <span class="theme-text">Dark Mode</span>
+          </button>
+        </div>
+      </nav>
+
+      <!-- Header Card -->
+      <header class="header-card" data-aos="fade-up">
+        <div class="header-content">
+          <h1 class="header-title">Detect Fake News<br />with AI Precision</h1>
+          <p class="header-subtitle">
+            Our advanced AI analyzes news articles in real-time to help you
+            identify misinformation and make informed decisions.
+          </p>
+          <div class="header-stats">
+            <div class="stat-item">
+              <div class="stat-icon">
+                <i class="fas fa-newspaper"></i>
+              </div>
+              <div class="stat-info">
+                <h4 id="articlesAnalyzed">15,420</h4>
+                <p>Articles Analyzed</p>
+              </div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-icon">
+                <i class="fas fa-chart-line"></i>
+              </div>
+              <div class="stat-info">
+                <h4 id="accuracyRate">98.5%</h4>
+                <p>Accuracy Rate</p>
+              </div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-icon">
+                <i class="fas fa-users"></i>
+              </div>
+              <div class="stat-info">
+                <h4 id="dailyUsers">1,250</h4>
+                <p>Daily Users</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="header-decoration"></div>
+      </header>
+
+      <!-- Main Content Card -->
+      <main class="main-card" data-aos="fade-up">
+        <!-- Form Header -->
+        <div class="form-header">
+          <h2 class="form-title">
+            <i class="fas fa-pen-alt"></i>
+            Analyze News Article
+          </h2>
+          <div class="word-count" id="wordCount">0 words | 0 characters</div>
+        </div>
+
+        <!-- Input Form -->
+        <form id="newsForm" action="/predict" method="POST">
+          <div class="form-group">
+            <textarea
+              class="form-control"
+              id="news"
+              name="news"
+              rows="6"
+              placeholder="Paste the news article text here..."
+            >
+{{ news_text if news_text else '' }}</textarea
+            >
+          </div>
+
+          <!-- Sample Buttons -->
+          <div class="sample-buttons">
+            <button
+              type="button"
+              class="sample-btn real"
+              onclick="fillSample('real')"
+            >
+              <i class="fas fa-check-circle"></i>
+              Load Real News Sample
+            </button>
+            <button
+              type="button"
+              class="sample-btn fake"
+              onclick="fillSample('fake')"
+            >
+              <i class="fas fa-exclamation-triangle"></i>
+              Load Fake News Sample
+            </button>
+          </div>
+
+          <!-- Predict Button -->
+          <button type="submit" class="btn-predict" id="predictBtn">
+            <span class="spinner" id="spinner"></span>
+            <span id="btnText">
+              <i class="fas fa-shield-alt"></i>
+              Verify Authenticity
+            </span>
+          </button>
+        </form>
+
+        <!-- Result Section -->
+        {% if prediction_text %}
+        <div
+          class="result-card"
+          data-aos="fade-up"
+          style="border-color: {{ '#4cc9f0' if prediction_text == 'Real News' else '#f72585' }};"
+        >
+          <div class="result-header">
+            <div class="result-badge {{ badge_class }}">
+              <i class="fas {{ icon }}"></i>
+              {{ prediction_text }}
+            </div>
+            <div class="result-confidence">
+              <div class="confidence-label">
+                <span>Confidence Score</span>
+                <strong>{{ "%.1f"|format(confidence) }}%</strong>
+              </div>
+              <div class="confidence-bar">
+                <div
+                  class="confidence-fill"
+                  style="width: {{ confidence }}%;"
+                ></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Analysis Metrics -->
+          <div class="analysis-metrics">
+            <div class="metric-card">
+              <div class="metric-icon">
+                <i class="fas fa-brain"></i>
+              </div>
+              <div class="metric-value">{{ "%.1f"|format(confidence) }}%</div>
+              <div class="metric-label">AI Confidence</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-icon">
+                <i class="fas fa-font"></i>
+              </div>
+              <div class="metric-value">
+                {{ news_text.split()|length if news_text else 0 }}
+              </div>
+              <div class="metric-label">Words Analyzed</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-icon">
+                <i class="fas fa-clock"></i>
+              </div>
+              <div class="metric-value">< 2s</div>
+              <div class="metric-label">Analysis Time</div>
+            </div>
+          </div>
+
+          <!-- Share Section -->
+          <div class="share-section">
+            <div class="share-title">Share this result</div>
+            <div class="share-buttons">
+              <a
+                href="#"
+                class="share-btn twitter"
+                onclick="shareOnTwitter('{{ prediction_text }}', {{ confidence }})"
+              >
+                <i class="fab fa-twitter"></i>
+                Twitter
+              </a>
+              <a
+                href="#"
+                class="share-btn facebook"
+                onclick="shareOnFacebook('{{ prediction_text }}', {{ confidence }})"
+              >
+                <i class="fab fa-facebook-f"></i>
+                Facebook
+              </a>
+              <a
+                href="#"
+                class="share-btn linkedin"
+                onclick="shareOnLinkedIn('{{ prediction_text }}', {{ confidence }})"
+              >
+                <i class="fab fa-linkedin-in"></i>
+                LinkedIn
+              </a>
+            </div>
+          </div>
+        </div>
+        {% endif %}
+
+        <!-- History Section -->
+        <div class="history-section">
+          <div class="history-header">
+            <h3 class="history-title">
+              <i class="fas fa-history"></i>
+              Recent Analysis History
+            </h3>
+            <button class="clear-history" onclick="clearHistory()">
+              <i class="fas fa-trash-alt"></i>
+              Clear All
+            </button>
+          </div>
+          <div class="history-grid" id="historyGrid">
+            <!-- History will be loaded here via JavaScript -->
+          </div>
+        </div>
+      </main>
+
+      <!-- Features Section -->
+      <section class="features-section" data-aos="fade-up">
+        <h2 class="section-title">
+          <i class="fas fa-star"></i>
+          Why Choose FakeNewsGuard?
+        </h2>
+        <div class="features-grid">
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i class="fas fa-robot"></i>
+            </div>
+            <h3>Advanced AI Model</h3>
+            <p>
+              Trained on 44,000+ news articles with 98.5% accuracy using
+              state-of-the-art machine learning.
+            </p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i class="fas fa-bolt"></i>
+            </div>
+            <h3>Real-time Analysis</h3>
+            <p>
+              Get results in under 2 seconds with our optimized prediction
+              pipeline.
+            </p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i class="fas fa-lock"></i>
+            </div>
+            <h3>Privacy First</h3>
+            <p>
+              Your data stays private. All analysis is done locally and history
+              is stored only on your device.
+            </p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i class="fas fa-mobile-alt"></i>
+            </div>
+            <h3>Fully Responsive</h3>
+            <p>
+              Works seamlessly on desktop, tablet, and mobile devices with dark
+              mode support.
+            </p>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Footer (outside container for full width) -->
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-section">
+            <h4>FakeNewsGuard</h4>
+            <p>
+              Empowering truth through AI technology. Our mission is to help
+              people identify misinformation and make informed decisions.
+            </p>
+          </div>
+          <div class="footer-section">
+            <h4>Quick Links</h4>
+            <ul class="footer-links">
+              <li>
+                <a href="#"
+                  ><i class="fas fa-chevron-right"></i> How it Works</a
+                >
+              </li>
+              <li>
+                <a href="#"><i class="fas fa-chevron-right"></i> API Access</a>
+              </li>
+              <li>
+                <a href="#"
+                  ><i class="fas fa-chevron-right"></i> Privacy Policy</a
+                >
+              </li>
+              <li>
+                <a href="#"
+                  ><i class="fas fa-chevron-right"></i> Terms of Service</a
+                >
+              </li>
+            </ul>
+          </div>
+          <div class="footer-section">
+            <h4>Connect With Us</h4>
+            <ul class="footer-links">
+              <li>
+                <a href="#"><i class="fab fa-github"></i> GitHub</a>
+              </li>
+              <li>
+                <a href="#"><i class="fab fa-linkedin"></i> LinkedIn</a>
+              </li>
+              <li>
+                <a href="#"><i class="fab fa-twitter"></i> Twitter</a>
+              </li>
+              <li>
+                <a href="#"><i class="fas fa-envelope"></i> Email</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <p>
+            Built with <i class="fas fa-heart"></i> by
+            <a href="#" target="_blank">Aabid Nabi</a> 
+             | <i class="fas fa-copyright"></i> 2026 All Rights Reserved
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+
+    <!-- Initialize AOS -->
+    <script>
+      AOS.init({
+        duration: 1000,
+        once: true,
+        disable: function () {
+          return window.innerWidth < 768; // Disable on mobile for better performance
+        },
+      });
+    </script>
+
+    <!-- Pass Flask variables to JavaScript -->
+    <script>
+      window.predictionData = {
+          {% if prediction_text and news_text %}
+          text: {{ news_text|tojson }},
+          result: "{{ prediction_text }}",
+          confidence: {{ confidence }}
+          {% endif %}
+      };
+    </script>
+  </body>
+</html>
