@@ -29,6 +29,9 @@ function initializeApp() {
 
   // Animate stats
   animateStats();
+
+  // Keep the nav usable on small screens
+  setupMobileNav();
 }
 
 // ===== THEME MANAGEMENT =====
@@ -176,7 +179,9 @@ function saveToHistory(text, result, confidence) {
       confidence: confidence,
       timestamp: new Date().toLocaleString(),
       icon:
-        result === "Real News" ? "fa-check-circle" : "fa-exclamation-triangle",
+        result === "Likely Real News"
+          ? "fa-check-circle"
+          : "fa-exclamation-triangle",
     };
 
     // Add to beginning
@@ -216,8 +221,8 @@ function loadHistory() {
 
     let html = "";
     history.forEach((item) => {
-      const resultClass = item.result === "Real News" ? "real" : "fake";
-      const badgeClass = item.result === "Real News" ? "real" : "fake";
+      const resultClass = item.result === "Likely Real News" ? "real" : "fake";
+      const badgeClass = item.result === "Likely Real News" ? "real" : "fake";
 
       html += `
                 <div class="history-card ${resultClass}" onclick="loadHistoryItem('${escapeHtml(item.snippet)}')">
@@ -358,6 +363,25 @@ function setupEventListeners() {
     .forEach((btn) => {
       btn.addEventListener("click", toggleTheme);
     });
+}
+
+function setupMobileNav() {
+  const navToggle = document.querySelector(".nav-toggle");
+  const navLinks = document.getElementById("navLinks");
+
+  if (!navToggle || !navLinks) return;
+
+  navToggle.addEventListener("click", () => {
+    navLinks.classList.toggle("is-open");
+    navToggle.classList.toggle("is-open");
+  });
+
+  navLinks.querySelectorAll("a").forEach((link) => {
+    link.addEventListener("click", () => {
+      navLinks.classList.remove("is-open");
+      navToggle.classList.remove("is-open");
+    });
+  });
 }
 
 // Make functions globally available
