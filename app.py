@@ -38,12 +38,12 @@ def predict():
         prob = model.predict_proba(vec)[0]
         
         if pred == 1:
-            result_text = "Real News"
+            result_text = "Likely Real News"
             confidence = prob[1] * 100
             badge_class = "bg-success"
             icon = "fa-check-circle"
         else:
-            result_text = "Fake News"
+            result_text = "Likely Fake News"
             confidence = prob[0] * 100
             badge_class = "bg-danger"
             icon = "fa-exclamation-triangle"

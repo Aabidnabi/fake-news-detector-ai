@@ -25,6 +25,10 @@
       href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
       rel="stylesheet"
     />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
 
     <!-- AOS Animation Library -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
@@ -61,11 +65,14 @@
           </div>
           <span class="logo-text">FakeNewsGuard</span>
         </div>
-        <div class="nav-links">
-          <a href="#" class="nav-link">Home</a>
-          <a href="#" class="nav-link">How it Works</a>
-          <a href="#" class="nav-link">About</a>
-          <a href="#" class="nav-link">Contact</a>
+        <button class="nav-toggle" type="button" aria-label="Toggle navigation">
+          <i class="fas fa-bars"></i>
+        </button>
+        <div class="nav-links" id="navLinks">
+          <a href="#top" class="nav-link">Home</a>
+          <a href="#how-it-works" class="nav-link">How it Works</a>
+          <a href="#about" class="nav-link">About</a>
+          <a href="#contact" class="nav-link">Contact</a>
           <button class="theme-toggle-nav">
             <i class="fas fa-moon"></i>
             <span class="theme-text">Dark Mode</span>
@@ -74,13 +81,20 @@
       </nav>
 
       <!-- Header Card -->
-      <header class="header-card" data-aos="fade-up">
+      <header class="header-card" id="top" data-aos="fade-up">
         <div class="header-content">
-          <h1 class="header-title">Detect Fake News<br />with AI Precision</h1>
+          <div class="eyebrow">Real-time verification workflow</div>
+          <h1 class="header-title">
+            Detect misinformation<br />with AI precision
+          </h1>
           <p class="header-subtitle">
-            Our advanced AI analyzes news articles in real-time to help you
-            identify misinformation and make informed decisions.
+            Paste an article, inspect the confidence score, and verify the claim
+            with clear supporting context instead of a single blind label.
           </p>
+          <div class="hero-note">
+            Every prediction is probabilistic. Use the confidence score, source,
+            date, and author before treating a result as verified.
+          </div>
           <div class="header-stats">
             <div class="stat-item">
               <div class="stat-icon">
@@ -115,7 +129,7 @@
       </header>
 
       <!-- Main Content Card -->
-      <main class="main-card" data-aos="fade-up">
+      <main class="main-card" id="analyze" data-aos="fade-up">
         <!-- Form Header -->
         <div class="form-header">
           <h2 class="form-title">
@@ -123,6 +137,17 @@
             Analyze News Article
           </h2>
           <div class="word-count" id="wordCount">0 words | 0 characters</div>
+        </div>
+
+        <div class="verification-strip">
+          <div class="verification-pill">
+            <i class="fas fa-circle-check"></i>
+            Live verification ready
+          </div>
+          <div class="verification-pill neutral">
+            <i class="fas fa-shield-halved"></i>
+            Confidence is contextual, not absolute
+          </div>
         </div>
 
         <!-- Input Form -->
@@ -137,6 +162,11 @@
             >
 {{ news_text if news_text else '' }}</textarea
             >
+          </div>
+
+          <div class="analysis-hint">
+            Tip: include the headline and body together for stronger predictions
+            and more useful verification notes.
           </div>
 
           <!-- Sample Buttons -->
@@ -174,7 +204,7 @@
         <div
           class="result-card"
           data-aos="fade-up"
-          style="border-color: {{ '#4cc9f0' if prediction_text == 'Real News' else '#f72585' }};"
+          style="border-color: {{ '#4cc9f0' if prediction_text == 'Likely Real News' else '#f72585' }};"
         >
           <div class="result-header">
             <div class="result-badge {{ badge_class }}">
@@ -193,6 +223,12 @@
                 ></div>
               </div>
             </div>
+          </div>
+
+          <div class="verification-note">
+            This is an AI-assisted classification. Cross-check the article
+            against at least two primary sources before sharing or publishing
+            it.
           </div>
 
           <!-- Analysis Metrics -->
@@ -273,8 +309,148 @@
         </div>
       </main>
 
+      <!-- How It Works Section -->
+      <section
+        class="content-section how-it-works"
+        id="how-it-works"
+        data-aos="fade-up"
+      >
+        <h2 class="section-title">
+          <i class="fas fa-diagram-project"></i>
+          How It Works
+        </h2>
+        <div class="content-grid steps-grid">
+          <article class="feature-card step-card">
+            <div class="feature-icon step-number">1</div>
+            <h3>Paste the article</h3>
+            <p>
+              Add the headline and the story body so the model sees more of the
+              language, structure, and context around the claim.
+            </p>
+          </article>
+          <article class="feature-card step-card">
+            <div class="feature-icon step-number">2</div>
+            <h3>Run the classifier</h3>
+            <p>
+              The app cleans the text, converts it into features, and generates
+              a probability score for likely real or likely fake news.
+            </p>
+          </article>
+          <article class="feature-card step-card">
+            <div class="feature-icon step-number">3</div>
+            <h3>Verify the result</h3>
+            <p>
+              Review the confidence score, source details, and the article
+              itself before you treat the output as verified.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <!-- About Section -->
+      <section
+        class="content-section about-section"
+        id="about"
+        data-aos="fade-up"
+      >
+        <h2 class="section-title">
+          <i class="fas fa-circle-info"></i>
+          About & Verification Resources
+        </h2>
+        <div class="about-grid">
+          <div class="about-card intro-card">
+            <h3>Built for fast, careful checks</h3>
+            <p>
+              FakeNewsGuard is designed to help you screen suspicious articles
+              quickly, but it does not replace editorial judgment or independent
+              fact-checking.
+            </p>
+            <div class="resource-list">
+              <a
+                href="https://www.kaggle.com/datasets/clmentbisaillon/fake-and-real-news-dataset"
+                target="_blank"
+                rel="noreferrer"
+              >
+                <i class="fas fa-database"></i>
+                Training dataset on Kaggle
+              </a>
+              <a
+                href="https://fake-news-detector-ai-0izj.onrender.com"
+                target="_blank"
+                rel="noreferrer"
+              >
+                <i class="fas fa-arrow-up-right-from-square"></i>
+                Live demo and deployment
+              </a>
+              <a
+                href="https://github.com/Aabidnabi/fake-news-detector-ai"
+                target="_blank"
+                rel="noreferrer"
+              >
+                <i class="fab fa-github"></i>
+                Source repository
+              </a>
+            </div>
+          </div>
+          <div class="about-card checklist-card">
+            <h3>Verification checklist</h3>
+            <ul class="checklist">
+              <li>Check the original publisher and publication date.</li>
+              <li>
+                Compare the claim against trusted outlets or primary documents.
+              </li>
+              <li>Read beyond the headline and inspect the article body.</li>
+              <li>
+                Treat low-confidence predictions as uncertain, not dismissed.
+              </li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- Contact Section -->
+      <section
+        class="content-section contact-section"
+        id="contact"
+        data-aos="fade-up"
+      >
+        <h2 class="section-title">
+          <i class="fas fa-envelope-open-text"></i>
+          Contact
+        </h2>
+        <div class="contact-grid">
+          <div class="contact-card">
+            <div class="contact-icon">
+              <i class="fab fa-github"></i>
+            </div>
+            <h3>Project issues</h3>
+            <p>
+              Use the repository for bug reports, feature requests, and
+              deployment questions.
+            </p>
+            <a
+              href="https://github.com/Aabidnabi/fake-news-detector-ai"
+              target="_blank"
+              rel="noreferrer"
+              >Open GitHub repo</a
+            >
+          </div>
+          <div class="contact-card">
+            <div class="contact-icon">
+              <i class="fas fa-paper-plane"></i>
+            </div>
+            <h3>Feedback</h3>
+            <p>
+              If you want to suggest new verification resources or UI
+              improvements, use the project channels above.
+            </p>
+            <a href="#top">Back to top</a>
+          </div>
+        </div>
+      </section>
+
       <!-- Features Section -->
-      <section class="features-section" data-aos="fade-up">
+      <section class="content-section features-section" data-aos="fade-up">
         <h2 class="section-title">
           <i class="fas fa-star"></i>
           Why Choose FakeNewsGuard?
@@ -362,16 +538,23 @@
             <h4>Connect With Us</h4>
             <ul class="footer-links">
               <li>
-                <a href="#"><i class="fab fa-github"></i> GitHub</a>
+                <a
+                  href="https://github.com/Aabidnabi/fake-news-detector-ai"
+                  target="_blank"
+                  rel="noreferrer"
+                  ><i class="fab fa-github"></i> GitHub</a
+                >
               </li>
               <li>
-                <a href="#"><i class="fab fa-linkedin"></i> LinkedIn</a>
+                <a href="#about"><i class="fas fa-circle-info"></i> About</a>
               </li>
               <li>
-                <a href="#"><i class="fab fa-twitter"></i> Twitter</a>
+                <a href="#contact"><i class="fas fa-envelope"></i> Contact</a>
               </li>
               <li>
-                <a href="#"><i class="fas fa-envelope"></i> Email</a>
+                <a href="#how-it-works"
+                  ><i class="fas fa-diagram-project"></i> How it Works</a
+                >
               </li>
             </ul>
           </div>
@@ -379,8 +562,8 @@
         <div class="footer-bottom">
           <p>
             Built with <i class="fas fa-heart"></i> by
-            <a href="#" target="_blank">Aabid Nabi</a> 
-             | <i class="fas fa-copyright"></i> 2026 All Rights Reserved
+            <a href="#" target="_blank">Aabid Nabi</a>
+            | <i class="fas fa-copyright"></i> 2026 All Rights Reserved
           </p>
         </div>
       </div>
